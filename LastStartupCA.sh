@@ -1,12 +1,11 @@
 #!/bin/bash
 
-#
-# File Name: LastStartupCA.sh https://github.com/acodega/mosyle
-# Custom command attribute to check and report the time of the Mac's last startup (aka last restart)
-# Custom command attributes are intended for use with Mosyle MDM
-# I wish Mosyle supported date formatting so we could report against it
-# ie "More than X days ago"
-#
+# I use this with mosyle to output how many days since last reboot, which seems to be what you wanted to achieve?
 
-# Use sysctl kern.boottime to get date and time, then format it as a date attribute
-date -jf "%s" "$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')" +"%Y-%m-%d %T"
+lastBootRaw=$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')
+
+today=$(date +%s)
+
+diffDays=$(( (today - lastBootRaw) / 86400 ))
+
+echo $diffDays
